@@ -21,7 +21,9 @@ const LoginForm: React.FC = () => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Form.Group controlId='email'>
-        <Form.Label>Email</Form.Label>
+        <Form.Label>
+          Email <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='email'
           placeholder='Enter email'
@@ -37,7 +39,9 @@ const LoginForm: React.FC = () => {
       </Form.Group>
 
       <Form.Group controlId='password'>
-        <Form.Label>Password</Form.Label>
+        <Form.Label>
+          Password <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='password'
           placeholder='Enter password'

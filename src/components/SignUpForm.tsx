@@ -7,6 +7,7 @@ interface SignUpFormValues {
   email: string;
   password: string;
   confirmPassword: string;
+  address: string; // New field
 }
 
 const SignUpForm: React.FC = () => {
@@ -27,7 +28,9 @@ const SignUpForm: React.FC = () => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Form.Group controlId='name'>
-        <Form.Label>Name</Form.Label>
+        <Form.Label>
+          Name <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='text'
           placeholder='Enter your name'
@@ -37,7 +40,9 @@ const SignUpForm: React.FC = () => {
       </Form.Group>
 
       <Form.Group controlId='email'>
-        <Form.Label>Email</Form.Label>
+        <Form.Label>
+          Email <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='email'
           placeholder='Enter email'
@@ -52,8 +57,22 @@ const SignUpForm: React.FC = () => {
         {errors.email && <Form.Text className='text-danger d-inline'>{errors.email.message}</Form.Text>}
       </Form.Group>
 
+      <Form.Group controlId='address'>
+        <Form.Label>
+          Address <span className='text-danger'>*</span>
+        </Form.Label>
+        <Form.Control
+          type='text'
+          placeholder='Enter address'
+          {...register("address", { required: "Address is required" })}
+        />
+        {errors.address && <Form.Text className='text-danger d-inline'>{errors.address.message}</Form.Text>}
+      </Form.Group>
+
       <Form.Group controlId='password'>
-        <Form.Label>Password</Form.Label>
+        <Form.Label>
+          Password <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='password'
           placeholder='Enter password'
@@ -69,7 +88,9 @@ const SignUpForm: React.FC = () => {
       </Form.Group>
 
       <Form.Group controlId='confirmPassword'>
-        <Form.Label>Confirm Password</Form.Label>
+        <Form.Label>
+          Confirm Password <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='password'
           placeholder='Confirm password'
