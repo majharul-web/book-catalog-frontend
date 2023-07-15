@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useLoginMutation } from "../redux/features/user/userApi";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../redux/hooks";
+import { userLoggedIn } from "../redux/features/user/userSlice";
 
 interface LoginFormValues {
   email: string;
@@ -8,15 +13,44 @@ interface LoginFormValues {
 }
 
 const LoginForm: React.FC = () => {
+  const [login, { data, isLoading, isSuccess, error }] = useLoginMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<LoginFormValues>();
 
   const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
-    console.log(data); // You can replace this with your login logic
+    login({ email: data.email, password: data.password });
   };
+
+  useEffect(() => {
+    if (!isLoading && !error && isSuccess && data.statusCode === 200) {
+      const { _id, email } = data.data.user;
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          accessToken: data.data.accessToken,
+          user: { _id, email },
+        })
+      );
+
+      dispatch(
+        userLoggedIn({
+          accessToken: data.data.accessToken,
+          user: { _id, email },
+        })
+      );
+      toast.success("User logged in successfully");
+      reset();
+      navigate("/");
+    } else if (!isLoading && error) {
+      toast.error("User login failed!");
+    }
+  }, [data, isSuccess, isLoading, error, navigate, reset]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "../redux/hooks";
-import { useSignupMutation } from "../redux/features/auth/authApi";
+import { useSignupMutation } from "../redux/features/user/userApi";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -28,8 +28,6 @@ const SignUpForm: React.FC = () => {
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
-
-  const dispatch = useAppDispatch();
 
   const onSubmit = (data: SignUpFormValues) => {
     signup({ name: data.name, email: data.email, password: data.password, address: data.address });
