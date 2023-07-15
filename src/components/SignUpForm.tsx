@@ -1,29 +1,49 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useAppDispatch } from "../redux/hooks";
+import { useSignupMutation } from "../redux/features/auth/authApi";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface SignUpFormValues {
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
-  address: string; // New field
+  address: string;
 }
 
 const SignUpForm: React.FC = () => {
+  const [signup, { data, isLoading, isSuccess, error }] = useSignupMutation();
+
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<SignUpFormValues>();
-
-  const onSubmit: SubmitHandler<SignUpFormValues> = (data) => {
-    console.log(data); // You can replace this with your sign-up logic
-  };
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
+
+  const dispatch = useAppDispatch();
+
+  const onSubmit = (data: SignUpFormValues) => {
+    signup({ name: data.name, email: data.email, password: data.password, address: data.address });
+  };
+
+  useEffect(() => {
+    if (!isLoading && !error && isSuccess && data.statusCode === 200) {
+      toast.success("Sign up successful");
+      reset();
+      navigate("/login");
+    } else if (!isLoading && error) {
+      toast.error("Sign up failed");
+    }
+  }, [data, isSuccess, isLoading, error, navigate, reset]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -105,7 +125,10 @@ const SignUpForm: React.FC = () => {
       </Form.Group>
 
       <div className='my-3'>
-        <Button className='btn btn-primary-outline btn-block w-100' type='submit'>
+        <Button
+          className={`btn btn-primary-outline btn-block w-100 ${isLoading && "disabled"}`}
+          type='submit'
+        >
           Sign Up
         </Button>
       </div>
