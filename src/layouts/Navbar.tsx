@@ -5,10 +5,15 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { FaSearch } from "react-icons/fa";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { userLoggedOut } from "../redux/features/user/userSlice";
 
 const Appbar = () => {
+  const auth = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   return (
     <Navbar key='xl' expand='xl' className='bg-body-tertiary my-2 header'>
       <Container>
@@ -48,10 +53,18 @@ const Appbar = () => {
               </Form>
 
               <div className='nav-btns'>
-                <button onClick={() => navigate("/login")} className='btn btn-primary mx-1 mx-lg-2 px-3'>
-                  Login
-                </button>
-                <button className='btn btn-primary-outline mx-1 mx-lg-2 px-3'>Logout</button>
+                {auth.accessToken ? (
+                  <button
+                    onClick={() => dispatch(userLoggedOut())}
+                    className='btn btn-primary-outline mx-1 mx-lg-2 px-3'
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <button onClick={() => navigate("/login")} className='btn btn-primary mx-1 mx-lg-2 px-3'>
+                    Login
+                  </button>
+                )}
               </div>
             </div>
           </Offcanvas.Body>
