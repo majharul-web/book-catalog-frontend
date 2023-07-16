@@ -8,16 +8,14 @@ export const bookApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["books"],
     }),
 
-    login: builder.mutation({
-      query: (data) => ({
-        url: "auth/login",
-        method: "POST",
-        body: data,
-      }),
+    getBooks: builder.query({
+      query: () => "/books",
+      providesTags: ["books"],
     }),
   }),
 });
 
-export const { useLoginMutation, useAddBookMutation } = bookApi;
+export const { useGetBooksQuery, useAddBookMutation } = bookApi;

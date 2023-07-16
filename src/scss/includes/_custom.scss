@@ -108,19 +108,12 @@ tr {
   list-style: none;
 }
 
-.card-image {
-  position: relative;
-}
-
-.card-avatar-group {
-  position: absolute;
-  bottom: -25px;
-  left: 15px;
-  display: flex;
-  align-items: center;
-
-  .card-avatar {
-    margin-right: -12px;
+.book-card {
+  .title {
+    font-size: 16px;
+  }
+  p {
+    font-size: 14px;
   }
 }
 
