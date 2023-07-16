@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { IBook } from "../types/globalTypes";
 interface IProps {
   book: IBook;
@@ -13,7 +14,7 @@ const BookCard = ({ book }: IProps) => {
           </div>
         )}
         <div className='mt-3 card-body book-card'>
-          <h3 className='text-primary title'>Title:{book.title}</h3>
+          <h6 className='text-primary title'>Title:{book.title}</h6>
           <p>
             <span className='bold'>Author:</span> {book?.author}
           </p>
@@ -28,7 +29,9 @@ const BookCard = ({ book }: IProps) => {
 
           <hr />
           <div className='flexCenter aCenter'>
-            <button className='btn btn-primary-outline'>see details</button>
+            <Link to={`/book-details/${book._id}`}>
+              <button className='btn btn-primary-outline'>see details</button>
+            </Link>
           </div>
         </div>
       </div>

@@ -10,6 +10,19 @@ export const bookApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["books"],
     }),
+    addComment: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `books/review/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["singleBook"],
+    }),
+
+    singleBook: builder.query({
+      query: (id) => `/books/${id}`,
+      providesTags: ["singleBook"],
+    }),
 
     getBooks: builder.query({
       query: () => "/books",
@@ -18,4 +31,4 @@ export const bookApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetBooksQuery, useAddBookMutation } = bookApi;
+export const { useGetBooksQuery, useAddBookMutation, useSingleBookQuery, useAddCommentMutation } = bookApi;

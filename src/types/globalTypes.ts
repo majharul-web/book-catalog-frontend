@@ -11,4 +11,5 @@ export type IBook = {
   reviews: IBookReview[];
   image?: string;
   description?: string;
+  _id?: string;
 };

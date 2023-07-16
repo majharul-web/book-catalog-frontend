@@ -50,7 +50,7 @@ const LoginForm: React.FC = () => {
     } else if (!isLoading && error) {
       toast.error("User login failed!");
     }
-  }, [data, isSuccess, isLoading, error, navigate, reset]);
+  }, [data, isSuccess, isLoading, error, navigate, reset, dispatch]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
