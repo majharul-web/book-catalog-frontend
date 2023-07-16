@@ -4,8 +4,7 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { FaSearch } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { userLoggedOut } from "../redux/features/user/userSlice";
 
@@ -15,7 +14,7 @@ const Appbar = () => {
   const navigate = useNavigate();
 
   return (
-    <Navbar key='xl' expand='xl' className='bg-body-tertiary my-2 header'>
+    <Navbar key='xl' expand='xl' className='bg-body-tertiary header'>
       <Container>
         <Navbar.Brand href='/' className='text-primary bold f-roboto'>
           BOOKSELF
@@ -33,25 +32,16 @@ const Appbar = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className='justify-content-start flex-grow-1 pe-3'>
-              <Nav.Link href='#marketplace'>Marketplace</Nav.Link>
-              <Nav.Link href='#Resource'>Resource</Nav.Link>
-              <Nav.Link href='#About'>About</Nav.Link>
+              <Link to='all-books' className='nav-link'>
+                All Books
+              </Link>
             </Nav>
             <div className='off-form'>
-              <Form className='mx-0 mx-lg-2'>
-                <InputGroup>
-                  <FormControl
-                    type='search'
-                    placeholder='Search'
-                    aria-label='Search'
-                    className='search-input'
-                  />
-                  <InputGroup.Text className='search-input-icon'>
-                    <FaSearch />
-                  </InputGroup.Text>
-                </InputGroup>
-              </Form>
-
+              {auth.accessToken && (
+                <Link to='add-books' className='nav-link'>
+                  Add Books
+                </Link>
+              )}
               <div className='nav-btns'>
                 {auth.accessToken ? (
                   <button

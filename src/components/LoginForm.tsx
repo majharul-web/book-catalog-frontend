@@ -93,6 +93,11 @@ const LoginForm: React.FC = () => {
       <div className='my-3'>
         <Button className='btn btn-primary-outline btn-block w-100' type='submit'>
           Log In
+          {isLoading && (
+            <div className='spinner-border text-danger mx-2' role='status'>
+              <span className='visually-hidden'>Loading...</span>
+            </div>
+          )}
         </Button>
       </div>
     </Form>

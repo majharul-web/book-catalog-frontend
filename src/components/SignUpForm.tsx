@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useAppDispatch } from "../redux/hooks";
 import { useSignupMutation } from "../redux/features/user/userApi";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +26,6 @@ const SignUpForm: React.FC = () => {
   } = useForm<SignUpFormValues>();
 
   const password = watch("password");
-  const confirmPassword = watch("confirmPassword");
 
   const onSubmit = (data: SignUpFormValues) => {
     signup({ name: data.name, email: data.email, password: data.password, address: data.address });
@@ -123,11 +121,13 @@ const SignUpForm: React.FC = () => {
       </Form.Group>
 
       <div className='my-3'>
-        <Button
-          className={`btn btn-primary-outline btn-block w-100 ${isLoading && "disabled"}`}
-          type='submit'
-        >
+        <Button className={`btn btn-primary-outline btn-block w-100`} type='submit'>
           Sign Up
+          {isLoading && (
+            <div className='spinner-border text-danger mx-2' role='status'>
+              <span className='visually-hidden'>Loading...</span>
+            </div>
+          )}
         </Button>
       </div>
     </Form>

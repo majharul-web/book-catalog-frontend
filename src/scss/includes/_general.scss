@@ -191,14 +191,15 @@ a {
 }
 
 .section-space {
-  padding: 6rem 0;
+  padding: 3rem 0;
 }
 
 .section-title {
   font-weight: 700;
-  font-size: 29px;
+  font-size: 18px;
   text-transform: uppercase;
   margin-bottom: 2rem;
+  color: var(--primary-color);
 }
 
 @media only screen and (min-width: 600px) {
