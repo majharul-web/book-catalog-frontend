@@ -35,10 +35,11 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ show, handleClose, id }) =>
     if (!isLoading && !error && isSuccess && data.statusCode === 200) {
       toast.success("User feedback submission successfully");
       reset();
+      handleClose();
     } else if (!isLoading && error) {
       toast.error("User feedback submission failed!");
     }
-  }, [data, isSuccess, isLoading, error, navigate, reset]);
+  }, [data, isSuccess, isLoading, error, navigate, reset, handleClose]);
   return (
     <div>
       <Modal show={show} onHide={handleClose}>

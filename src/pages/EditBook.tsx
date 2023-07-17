@@ -1,7 +1,10 @@
 import { Card } from "react-bootstrap";
-import AddBookForm from "../components/AddBookForm";
 
-const AddNewBook = () => {
+import EditBookForm from "../components/EditBookForm";
+import { useParams } from "react-router-dom";
+
+const EditBook = () => {
+  const { id } = useParams();
   return (
     <div className='section-space'>
       <div className='container'>
@@ -13,9 +16,9 @@ const AddNewBook = () => {
             <Card className='p-md-4'>
               <Card.Body>
                 <h2 className='text-center f' style={{ color: "#01b399" }}>
-                  Add New Book{" "}
+                  Edit Book{" "}
                 </h2>
-                <AddBookForm />
+                <EditBookForm id={id!} />
               </Card.Body>
             </Card>
           </div>
@@ -25,4 +28,4 @@ const AddNewBook = () => {
   );
 };
 
-export default AddNewBook;
+export default EditBook;

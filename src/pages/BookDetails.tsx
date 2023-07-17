@@ -1,19 +1,38 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useSingleBookQuery } from "../redux/features/book/bookApi";
-import { FaStar } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDeleteBookMutation, useSingleBookQuery } from "../redux/features/book/bookApi";
+import { FaHeart, FaStar } from "react-icons/fa";
+import { BiSolidPencil, BiSolidBookReader } from "react-icons/bi";
+import { MdDeleteForever } from "react-icons/md";
 import FeedbackForm from "../components/FeedbackForm";
+import { toast } from "react-hot-toast";
 
 const BookDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, isLoading, error } = useSingleBookQuery(id);
   const book = data?.data;
-  console.log("book", book);
+
+  const [deleteBook, { data: deletedData, isLoading: deleteLoading, error: deleteError, isSuccess }] =
+    useDeleteBookMutation();
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleDelete = () => {
+    deleteBook(id);
+  };
+
+  useEffect(() => {
+    if (!deleteLoading && !deleteError && isSuccess && deletedData.statusCode === 200) {
+      toast.success("Book deleted successful");
+      navigate("/all-books");
+    } else if (!deleteLoading && deleteError) {
+      toast.error("Something went wrong!");
+    }
+  }, [deletedData, isSuccess, deleteLoading, deleteError, navigate]);
 
   let content;
   if (isLoading) {
@@ -52,13 +71,43 @@ const BookDetails = () => {
               </p>
               <p>
                 <span className='bold'>Publication Date:</span>
-                {/* {new Date(book?.publicationDate).toISOString().split("T")[0]} */}
+
                 {new Date(book?.publicationDate).toISOString().split("T")[0]}
               </p>
               <p className='card-text'>
                 <span className='bold'>description:</span>
                 {book?.description?.slice(0, 100)}
               </p>
+              <div className=''>
+                <button onClick={handleShow} className='btn btn-primary-outline my-1 mx-1'>
+                  Wishlist{" "}
+                  <span className='ms-1'>
+                    <FaHeart />
+                  </span>
+                </button>
+                <button onClick={handleShow} className='btn btn-primary-outline my-1 mx-1'>
+                  Reading list{" "}
+                  <span className='ms-1'>
+                    <BiSolidBookReader />
+                  </span>
+                </button>
+                <Link
+                  to={`/edit-book/${id}`}
+                  onClick={handleShow}
+                  className='btn btn-primary-outline my-1 mx-1'
+                >
+                  Edit{" "}
+                  <span className='ms-1'>
+                    <BiSolidPencil />
+                  </span>
+                </Link>
+                <button onClick={() => handleDelete()} className='btn btn-primary-outline my-1 mx-1'>
+                  Delete{" "}
+                  <span className='ms-1'>
+                    <MdDeleteForever />
+                  </span>
+                </button>
+              </div>
               <hr />
               <div>
                 {book.reviews && (
@@ -82,7 +131,7 @@ const BookDetails = () => {
                   </div>
                 )}
 
-                <button onClick={handleShow} className='btn btn-primary'>
+                <button onClick={handleShow} className='btn btn-primary-outline'>
                   Add Feedback
                 </button>
               </div>
@@ -95,10 +144,7 @@ const BookDetails = () => {
   return (
     <>
       <div className='section-space'>
-        <div className='container'>
-          <h5 className='section-title'>Details of</h5>
-          {content}
-        </div>
+        <div className='container'>{content}</div>
       </div>
       {show && <FeedbackForm show={show} handleClose={handleClose} id={id!} />}
     </>
