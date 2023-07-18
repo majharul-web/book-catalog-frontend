@@ -9,6 +9,8 @@ import Button from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { RxAvatar } from "react-icons/rx";
+import { FaHeart } from "react-icons/fa";
+import { BiSolidBookReader } from "react-icons/bi";
 
 const Appbar = () => {
   const auth = useAppSelector((state) => state.auth);
@@ -34,13 +36,19 @@ const Appbar = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className='justify-content-start flex-grow-1 pe-3'>
-              <Link to='all-books' className='nav-link'>
+              <Link to='all-books' className='nav-link mx-2'>
                 All Books
               </Link>
             </Nav>
             <div className='off-form'>
+              <Link to='wishlist' className='nav-link mx-2'>
+                <FaHeart />
+              </Link>
+              <Link to='reading-list' className='nav-link mx-2'>
+                <BiSolidBookReader />
+              </Link>
               {auth.accessToken && (
-                <Link to='add-books' className='nav-link'>
+                <Link to='add-books' className='nav-link mx-2'>
                   Add Books
                 </Link>
               )}

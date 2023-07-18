@@ -1,10 +1,12 @@
-import BookCard from "../components/BookCard";
 import NoDatafound from "../components/NoDatafound";
-import { useGetBooksQuery } from "../redux/features/book/bookApi";
-import { IBook } from "../types/globalTypes";
+import ReadBook from "../components/ReadBook";
 
-const AllBooks = () => {
-  const { data, isLoading, error } = useGetBooksQuery(undefined, {
+import { useGetReadingListQuery } from "../redux/features/readingList/readingListApi";
+import { useAppSelector } from "../redux/hooks";
+
+const ReadingLists = () => {
+  const { user } = useAppSelector((state) => state.auth);
+  const { data, isLoading, error } = useGetReadingListQuery(user!._id, {
     refetchOnMountOrArgChange: true,
     pollingInterval: 3000,
   });
@@ -34,8 +36,8 @@ const AllBooks = () => {
   if (!isLoading && !error && data.data.length > 0) {
     content = (
       <div className='row row-cols-1 row-cols-md-4'>
-        {allBooks.map((book: IBook, index: any) => (
-          <BookCard book={book} key={index} />
+        {allBooks.map((book: any, index: any) => (
+          <ReadBook books={book} key={index} />
         ))}
       </div>
     );
@@ -43,11 +45,11 @@ const AllBooks = () => {
   return (
     <div className='section-space'>
       <div className='container'>
-        <h5 className='section-title'> All Books</h5>
+        <h3>ReadingLists</h3>
         {content}
       </div>
     </div>
   );
 };
 
-export default AllBooks;
+export default ReadingLists;

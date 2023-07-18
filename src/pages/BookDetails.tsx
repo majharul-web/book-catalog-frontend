@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { BiSolidPencil, BiSolidBookReader } from "react-icons/bi";
@@ -9,6 +9,8 @@ import { useAppSelector } from "../redux/hooks";
 import { isBookCreatedBySame } from "../utils/helper";
 import DeleteBook from "../components/DeleteBook";
 import { useSingleBookQuery } from "../redux/features/book/bookApi";
+import { useAddToWishListMutation } from "../redux/features/wishlist/wishListApi";
+import { useAddToReadingListMutation } from "../redux/features/readingList/readingListApi";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -16,6 +18,17 @@ const BookDetails = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { data, isLoading, error } = useSingleBookQuery(id);
   const book = data?.data;
+
+  // wish and read
+  const [
+    addToWishlist,
+    { data: wishData, isLoading: wishLoading, error: wishError, isSuccess: wishSuccess },
+  ] = useAddToWishListMutation();
+
+  const [
+    addToReadingList,
+    { data: readingData, isLoading: readingLoading, error: readingError, isSuccess: readingSuccess },
+  ] = useAddToReadingListMutation();
 
   const [show, setShow] = useState(false);
 
@@ -34,6 +47,36 @@ const BookDetails = () => {
       toast.error("You can't edit this book");
     }
   };
+
+  const handleAddToWishList = () => {
+    addToWishlist({
+      bookId: book._id,
+      userId: user!._id,
+    });
+  };
+
+  const handleAddToReadingList = () => {
+    addToReadingList({
+      bookId: book._id,
+      userId: user!._id,
+    });
+  };
+
+  useEffect(() => {
+    if (!wishLoading && !wishError && wishSuccess && wishData.statusCode === 200) {
+      toast.success("Book add to wishlist successfully");
+    } else if (!wishLoading && wishError) {
+      toast.error("Something went wrong!");
+    }
+  }, [wishData, wishSuccess, wishLoading, wishError]);
+
+  useEffect(() => {
+    if (!readingLoading && !readingError && readingSuccess && readingData.statusCode === 200) {
+      toast.success("Book add to readinglist successfully");
+    } else if (!readingLoading && readingError) {
+      toast.error("Something went wrong!");
+    }
+  }, [readingData, readingSuccess, readingLoading, readingError]);
 
   let content;
   if (isLoading) {
@@ -80,13 +123,16 @@ const BookDetails = () => {
                 {book?.description?.slice(0, 100)}
               </p>
               <div className=''>
-                <button onClick={handleShow} className='btn btn-primary-outline my-1 mx-1'>
+                <button onClick={() => handleAddToWishList()} className='btn btn-primary-outline my-1 mx-1'>
                   Wishlist{" "}
                   <span className='ms-1'>
                     <FaHeart />
                   </span>
                 </button>
-                <button onClick={handleShow} className='btn btn-primary-outline my-1 mx-1'>
+                <button
+                  onClick={() => handleAddToReadingList()}
+                  className='btn btn-primary-outline my-1 mx-1'
+                >
                   Reading list{" "}
                   <span className='ms-1'>
                     <BiSolidBookReader />

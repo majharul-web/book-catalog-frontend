@@ -1,5 +1,10 @@
 // booststrap customize start -------------
 
+.nav-link:hover,
+.nav-link:focus {
+  color: var(--primary-color);
+}
+
 .form-control:focus {
   box-shadow: none;
   outline: 0;

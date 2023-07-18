@@ -10,7 +10,7 @@ const Footer = () => {
           <div className='col-md-4'>
             <div>
               <h1 className='section-title'>BOOKSELF</h1>
-              <p className='text-muted'>
+              <p>
                 The world’s first and largest digital marketplace for crypto collectibles and non-fungible
                 tokens (NFTs). Buy, sell, and discover exclusive digital items.
               </p>

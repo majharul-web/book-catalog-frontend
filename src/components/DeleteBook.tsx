@@ -20,7 +20,6 @@ const DeleteBook: React.FC<FeedbackFormProps> = ({ show, handleClose, id, book }
     useDeleteBookMutation();
 
   const handleDelete = () => {
-    console.log("book", book);
     if (isBookCreatedBySame(user!._id, book.createdBy._id)) {
       deleteBook(id);
     } else {

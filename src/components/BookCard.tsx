@@ -10,7 +10,9 @@ const BookCard = ({ book }: IProps) => {
       <div className='card'>
         {book.image && (
           <div className='card-image'>
-            <img style={{ width: "100%", maxHeight: "200px" }} src={book?.image} alt='' />
+            <Link to={`/book-details/${book._id}`}>
+              <img style={{ width: "100%", maxHeight: "200px" }} src={book?.image} alt='' />
+            </Link>
           </div>
         )}
         <div className='mt-3 card-body book-card'>
