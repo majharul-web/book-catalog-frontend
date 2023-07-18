@@ -122,35 +122,37 @@ const BookDetails = () => {
                 <span className='bold'>description:</span>
                 {book?.description?.slice(0, 100)}
               </p>
-              <div className=''>
-                <button onClick={() => handleAddToWishList()} className='btn btn-primary-outline my-1 mx-1'>
-                  Wishlist{" "}
-                  <span className='ms-1'>
-                    <FaHeart />
-                  </span>
-                </button>
-                <button
-                  onClick={() => handleAddToReadingList()}
-                  className='btn btn-primary-outline my-1 mx-1'
-                >
-                  Reading list{" "}
-                  <span className='ms-1'>
-                    <BiSolidBookReader />
-                  </span>
-                </button>
-                <button onClick={() => handleEdit()} className='btn btn-primary-outline my-1 mx-1'>
-                  Edit
-                  <span className='ms-1'>
-                    <BiSolidPencil />
-                  </span>
-                </button>
-                <button onClick={handleDeleteShow} className='btn btn-primary-outline my-1 mx-1'>
-                  Delete{" "}
-                  <span className='ms-1'>
-                    <MdDeleteForever />
-                  </span>
-                </button>
-              </div>
+              {user?.email && (
+                <div>
+                  <button onClick={() => handleAddToWishList()} className='btn btn-primary-outline my-1 mx-1'>
+                    Wishlist{" "}
+                    <span className='ms-1'>
+                      <FaHeart />
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => handleAddToReadingList()}
+                    className='btn btn-primary-outline my-1 mx-1'
+                  >
+                    Reading list{" "}
+                    <span className='ms-1'>
+                      <BiSolidBookReader />
+                    </span>
+                  </button>
+                  <button onClick={() => handleEdit()} className='btn btn-primary-outline my-1 mx-1'>
+                    Edit
+                    <span className='ms-1'>
+                      <BiSolidPencil />
+                    </span>
+                  </button>
+                  <button onClick={handleDeleteShow} className='btn btn-primary-outline my-1 mx-1'>
+                    Delete{" "}
+                    <span className='ms-1'>
+                      <MdDeleteForever />
+                    </span>
+                  </button>
+                </div>
+              )}
               <hr />
               <div>
                 {book.reviews && (
@@ -174,9 +176,11 @@ const BookDetails = () => {
                   </div>
                 )}
 
-                <button onClick={handleShow} className='btn btn-primary-outline'>
-                  Add Feedback
-                </button>
+                {user?.email && (
+                  <button onClick={handleShow} className='btn btn-primary-outline'>
+                    Add Feedback
+                  </button>
+                )}
               </div>
             </div>
           </div>
