@@ -1,11 +1,12 @@
-import BookCard from "../components/BookCard";
-import { useGetBooksQuery } from "../redux/features/book/bookApi";
-import { IBook } from "../types/globalTypes";
+import NoDatafound from "../components/NoDatafound";
+import WishBook from "../components/WishBook";
+import { useGetWishListQuery } from "../redux/features/wishlist/wishListApi";
+import { useAppSelector } from "../redux/hooks";
 
-const Home = () => {
-  const { data, isLoading, error } = useGetBooksQuery(undefined, {
+const WishList = () => {
+  const { user } = useAppSelector((state) => state.auth);
+  const { data, isLoading, error } = useGetWishListQuery(user!._id, {
     refetchOnMountOrArgChange: true,
-    pollingInterval: 3000,
   });
   const allBooks = data?.data;
 
@@ -27,18 +28,14 @@ const Home = () => {
     );
   }
   if (!isLoading && !error && data.data.length === 0) {
-    content = (
-      <div className='flex flexCenter aCenter'>
-        <h5 className='text-center'>No books available</h5>
-      </div>
-    );
+    content = <NoDatafound />;
   }
 
   if (!isLoading && !error && data.data.length > 0) {
     content = (
       <div className='row row-cols-1 row-cols-md-4'>
-        {allBooks.map((book: IBook, index: any) => (
-          <BookCard book={book} key={index} />
+        {allBooks.map((book: any, index: any) => (
+          <WishBook books={book} key={index} />
         ))}
       </div>
     );
@@ -46,11 +43,11 @@ const Home = () => {
   return (
     <div className='section-space'>
       <div className='container'>
-        <h5 className='section-title'>Books</h5>
+        <h3>WishList</h3>
         {content}
       </div>
     </div>
   );
 };
 
-export default Home;
+export default WishList;

@@ -1,16 +1,24 @@
-import { FormControl, InputGroup } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { FaSearch } from "react-icons/fa";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { userLoggedOut } from "../redux/features/user/userSlice";
+import Button from "react-bootstrap/Button";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import { RxAvatar } from "react-icons/rx";
+import { FaHeart } from "react-icons/fa";
+import { BiSolidBookReader } from "react-icons/bi";
 
 const Appbar = () => {
+  const auth = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   return (
-    <Navbar key='xl' expand='xl' className='bg-body-tertiary my-2 header'>
+    <Navbar key='xl' expand='xl' className='bg-body-tertiary header'>
       <Container>
         <Navbar.Brand href='/' className='text-primary bold f-roboto'>
           BOOKSELF
@@ -28,31 +36,51 @@ const Appbar = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className='justify-content-start flex-grow-1 pe-3'>
-              <Nav.Link href='#marketplace'>Marketplace</Nav.Link>
-              <Nav.Link href='#Resource'>Resource</Nav.Link>
-              <Nav.Link href='#About'>About</Nav.Link>
+              <Link to='all-books' className='nav-link mx-2'>
+                All Books
+              </Link>
             </Nav>
             <div className='off-form'>
-              <Form className='mx-0 mx-lg-2'>
-                <InputGroup>
-                  <FormControl
-                    type='search'
-                    placeholder='Search'
-                    aria-label='Search'
-                    className='search-input'
-                  />
-                  <InputGroup.Text className='search-input-icon'>
-                    <FaSearch />
-                  </InputGroup.Text>
-                </InputGroup>
-              </Form>
-
+              <Link to='wishlist' className='nav-link mx-2'>
+                <FaHeart />
+              </Link>
+              <Link to='reading-list' className='nav-link mx-2'>
+                <BiSolidBookReader />
+              </Link>
+              {auth.accessToken && (
+                <Link to='add-books' className='nav-link mx-2'>
+                  Add Books
+                </Link>
+              )}
               <div className='nav-btns'>
-                <button onClick={() => navigate("/login")} className='btn btn-primary mx-1 mx-lg-2 px-3'>
-                  Login
-                </button>
-                <button className='btn btn-primary-outline mx-1 mx-lg-2 px-3'>Logout</button>
+                {auth.accessToken ? (
+                  <button
+                    onClick={() => dispatch(userLoggedOut())}
+                    className='btn btn-primary-outline mx-1 mx-lg-2 px-3'
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <button onClick={() => navigate("/login")} className='btn btn-primary mx-1 mx-lg-2 px-3'>
+                    Login
+                  </button>
+                )}
               </div>
+
+              {auth.accessToken && (
+                <OverlayTrigger
+                  placement='bottom'
+                  overlay={
+                    <Tooltip id={`tooltip-bottom`}>
+                      <strong>{auth?.user?.email}</strong>.
+                    </Tooltip>
+                  }
+                >
+                  <Button variant='secondary'>
+                    <RxAvatar />
+                  </Button>
+                </OverlayTrigger>
+              )}
             </div>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

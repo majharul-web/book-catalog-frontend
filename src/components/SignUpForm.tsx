@@ -1,33 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useSignupMutation } from "../redux/features/user/userApi";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface SignUpFormValues {
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
+  address: string;
 }
 
 const SignUpForm: React.FC = () => {
+  const [signup, { data, isLoading, isSuccess, error }] = useSignupMutation();
+
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<SignUpFormValues>();
 
-  const onSubmit: SubmitHandler<SignUpFormValues> = (data) => {
-    console.log(data); // You can replace this with your sign-up logic
+  const password = watch("password");
+
+  const onSubmit = (data: SignUpFormValues) => {
+    signup({ name: data.name, email: data.email, password: data.password, address: data.address });
   };
 
-  const password = watch("password");
-  const confirmPassword = watch("confirmPassword");
+  useEffect(() => {
+    if (!isLoading && !error && isSuccess && data.statusCode === 200) {
+      toast.success("Sign up successful");
+      reset();
+      navigate("/login");
+    } else if (!isLoading && error) {
+      toast.error("Sign up failed");
+    }
+  }, [data, isSuccess, isLoading, error, navigate, reset]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Form.Group controlId='name'>
-        <Form.Label>Name</Form.Label>
+        <Form.Label>
+          Name <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='text'
           placeholder='Enter your name'
@@ -37,7 +56,9 @@ const SignUpForm: React.FC = () => {
       </Form.Group>
 
       <Form.Group controlId='email'>
-        <Form.Label>Email</Form.Label>
+        <Form.Label>
+          Email <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='email'
           placeholder='Enter email'
@@ -52,8 +73,22 @@ const SignUpForm: React.FC = () => {
         {errors.email && <Form.Text className='text-danger d-inline'>{errors.email.message}</Form.Text>}
       </Form.Group>
 
+      <Form.Group controlId='address'>
+        <Form.Label>
+          Address <span className='text-danger'>*</span>
+        </Form.Label>
+        <Form.Control
+          type='text'
+          placeholder='Enter address'
+          {...register("address", { required: "Address is required" })}
+        />
+        {errors.address && <Form.Text className='text-danger d-inline'>{errors.address.message}</Form.Text>}
+      </Form.Group>
+
       <Form.Group controlId='password'>
-        <Form.Label>Password</Form.Label>
+        <Form.Label>
+          Password <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='password'
           placeholder='Enter password'
@@ -69,7 +104,9 @@ const SignUpForm: React.FC = () => {
       </Form.Group>
 
       <Form.Group controlId='confirmPassword'>
-        <Form.Label>Confirm Password</Form.Label>
+        <Form.Label>
+          Confirm Password <span className='text-danger'>*</span>
+        </Form.Label>
         <Form.Control
           type='password'
           placeholder='Confirm password'
@@ -84,8 +121,13 @@ const SignUpForm: React.FC = () => {
       </Form.Group>
 
       <div className='my-3'>
-        <Button className='btn btn-primary-outline btn-block w-100' type='submit'>
+        <Button className={`btn btn-primary-outline btn-block w-100`} type='submit'>
           Sign Up
+          {isLoading && (
+            <div className='spinner-border text-danger mx-2' role='status'>
+              <span className='visually-hidden'>Loading...</span>
+            </div>
+          )}
         </Button>
       </div>
     </Form>

@@ -1,9 +1,39 @@
 // booststrap customize start -------------
 
+.nav-link:hover,
+.nav-link:focus {
+  color: var(--primary-color);
+}
+
 .form-control:focus {
   box-shadow: none;
   outline: 0;
   border: 1px solid var(--theme-color);
+}
+.form-select {
+  box-shadow: none;
+  outline: 0;
+  border: 1px solid var(--theme-color);
+  display: inline-block;
+  width: auto;
+}
+.form-select:hover {
+  box-shadow: none;
+  outline: 0;
+  border: 1px solid var(--theme-color);
+}
+.form-select:focus {
+  box-shadow: none;
+  outline: 0;
+  border: 1px solid var(--theme-color);
+}
+.form-label {
+  margin-bottom: 0.1rem;
+  font-size: 14px;
+}
+
+.form-control {
+  font-size: 14px;
 }
 
 .tbody,
@@ -13,6 +43,12 @@ th,
 thead,
 tr {
   border-color: var(--theme-color);
+}
+
+.spinner-grow,
+.spinner-border {
+  width: 1rem;
+  height: 1rem;
 }
 
 .navbar-toggler {
@@ -94,20 +130,17 @@ tr {
   list-style: none;
 }
 
-.card-image {
-  position: relative;
+.book-card {
+  .title {
+    font-size: 16px;
+  }
+  p {
+    font-size: 14px;
+  }
 }
 
-.card-avatar-group {
-  position: absolute;
-  bottom: -25px;
-  left: 15px;
-  display: flex;
-  align-items: center;
-
-  .card-avatar {
-    margin-right: -12px;
-  }
+.rating {
+  color: #f49e2f;
 }
 
 // more-section  end -------------
