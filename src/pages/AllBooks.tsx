@@ -8,7 +8,6 @@ import { genreList } from "../utils/helper";
 const AllBooks = () => {
   const [search, setSearchTerm] = useState("");
   const [genre, setGenre] = useState("");
-  const [year, setYear] = useState("");
 
   const { data, isLoading, error } = useGetBooksQuery(undefined, {
     refetchOnMountOrArgChange: true,
@@ -35,9 +34,6 @@ const AllBooks = () => {
   const handleGenreChange = (e: any) => {
     setGenre(e.target.value);
   };
-  const handleYearChange = (e: any) => {
-    setYear(e.target.value);
-  };
 
   // search user by email or name
   const allUsersData = useMemo(() => {
@@ -55,14 +51,9 @@ const AllBooks = () => {
         book?.genre?.toLowerCase().includes(genre.toLowerCase())
       );
     }
-    if (year) {
-      computedUsers = computedUsers.filter((book: IBook) => {
-        console.log("year book", book);
-        return book?.genre?.toLowerCase().includes(genre.toLowerCase());
-      });
-    }
+
     return computedUsers;
-  }, [search, allBooks, genre, year]);
+  }, [search, allBooks, genre]);
 
   // console.log(searchTerm);
 
