@@ -3,9 +3,12 @@ import BookCard from "../components/BookCard";
 import NoDatafound from "../components/NoDatafound";
 import { useGetBooksQuery } from "../redux/features/book/bookApi";
 import { IBook } from "../types/globalTypes";
+import { genreList } from "../utils/helper";
 
 const AllBooks = () => {
   const [search, setSearchTerm] = useState("");
+  const [genre, setGenre] = useState("");
+  const [year, setYear] = useState("");
 
   const { data, isLoading, error } = useGetBooksQuery(undefined, {
     refetchOnMountOrArgChange: true,
@@ -29,6 +32,13 @@ const AllBooks = () => {
 
   const handleSearch = debounceHandler(doSearch, 500);
 
+  const handleGenreChange = (e: any) => {
+    setGenre(e.target.value);
+  };
+  const handleYearChange = (e: any) => {
+    setYear(e.target.value);
+  };
+
   // search user by email or name
   const allUsersData = useMemo(() => {
     let computedUsers = allBooks;
@@ -40,8 +50,19 @@ const AllBooks = () => {
           book?.genre?.toLowerCase().includes(search.toLowerCase())
       );
     }
+    if (genre) {
+      computedUsers = computedUsers.filter((book: IBook) =>
+        book?.genre?.toLowerCase().includes(genre.toLowerCase())
+      );
+    }
+    if (year) {
+      computedUsers = computedUsers.filter((book: IBook) => {
+        console.log("year book", book);
+        return book?.genre?.toLowerCase().includes(genre.toLowerCase());
+      });
+    }
     return computedUsers;
-  }, [search, allBooks]);
+  }, [search, allBooks, genre, year]);
 
   // console.log(searchTerm);
 
@@ -81,7 +102,7 @@ const AllBooks = () => {
       <div className='container'>
         <h5 className='section-title'> All Books</h5>
         <div className='row'>
-          <div className='col-md-6'>
+          <div className='col-md-6 my-2'>
             <div className='mb-3'>
               <input
                 type='text'
@@ -91,16 +112,23 @@ const AllBooks = () => {
               />
             </div>
           </div>
-          {/* <div className='col-md-6 text-end'>
+          <div className='col-md-6 text-end my-2'>
             <div>
               <label className='form-label bold me-2'>Filter:</label>
-              <select className='form-select ms-1' aria-label='Default select example'>
-                <option value='plan to read soon'>plan to read soon</option>
-                <option value='currently reading'>currently reading</option>
-                <option value='finished reading'>finished reading</option>
+              <select onChange={handleGenreChange} className='form-select ms-1'>
+                <option value='' selected>
+                  Select Genre
+                </option>
+
+                {genreList.map((genre: string, i: number) => (
+                  <option key={i} value={genre}>
+                    {genre}
+                  </option>
+                ))}
+                <option value=''>All</option>
               </select>
             </div>
-          </div> */}
+          </div>
         </div>
         {content}
       </div>
