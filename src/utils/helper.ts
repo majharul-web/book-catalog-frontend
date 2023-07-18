@@ -4,3 +4,5 @@ export const isBookCreatedBySame = (userId: string, bookUserId: string): boolean
   }
   return false;
 };
+
+export const bookReadStatus: string[] = ["plan to read soon", "currently reading", "finished reading"];

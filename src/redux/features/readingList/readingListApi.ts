@@ -11,7 +11,7 @@ export const readingListApi = apiSlice.injectEndpoints({
       invalidatesTags: ["readingList"],
     }),
     editReadingList: builder.mutation({
-      query: ({ data, id }) => ({
+      query: ({ id, data }) => ({
         url: `readingList/${id}`,
         method: "PATCH",
         body: data,
@@ -33,5 +33,9 @@ export const readingListApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useAddToReadingListMutation, useDeleteFromReadingListMutation, useGetReadingListQuery } =
-  readingListApi;
+export const {
+  useAddToReadingListMutation,
+  useDeleteFromReadingListMutation,
+  useGetReadingListQuery,
+  useEditReadingListMutation,
+} = readingListApi;

@@ -1,14 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { toast } from "react-hot-toast";
-import { useDeleteFromReadingListMutation } from "../redux/features/readingList/readingListApi";
+import {
+  useDeleteFromReadingListMutation,
+  useEditReadingListMutation,
+} from "../redux/features/readingList/readingListApi";
 
 interface IProps {
   books: any;
 }
 const ReadBook = ({ books }: IProps) => {
   const book = books.book;
+  const [status, setStatus] = useState("");
 
   const [deleteBook, { data: deletedData, isLoading: deleteLoading, error: deleteError, isSuccess }] =
     useDeleteFromReadingListMutation();
@@ -24,6 +28,23 @@ const ReadBook = ({ books }: IProps) => {
       toast.error("Something went wrong!");
     }
   }, [deletedData, isSuccess, deleteLoading, deleteError]);
+
+  const [
+    updateStatus,
+    { data: statusData, isLoading: statusLoading, error: statusError, isSuccess: statusSuccess },
+  ] = useEditReadingListMutation();
+
+  const handleStatusChange = (e: any) => {
+    updateStatus({ id: books._id, data: { status: e.target.value } });
+  };
+
+  useEffect(() => {
+    if (!statusLoading && !statusError && statusSuccess && statusData.statusCode === 200) {
+      toast.success("Book status updated successful");
+    } else if (!statusLoading && statusError) {
+      toast.error("Something went wrong!");
+    }
+  }, [statusData, statusSuccess, statusLoading, statusError]);
 
   return (
     <div className='col h-100'>
@@ -47,6 +68,24 @@ const ReadBook = ({ books }: IProps) => {
           <p>
             <span className='bold'>description:</span>
             {book?.description?.slice(0, 100)}
+          </p>
+          <p>
+            <span className='bold'>Status:</span>
+            <select
+              onChange={handleStatusChange}
+              className='form-select ms-1'
+              aria-label='Default select example'
+            >
+              <option selected={books.status === "plan to read soon"} value='plan to read soon'>
+                plan to read soon
+              </option>
+              <option selected={books.status === "currently reading"} value='currently reading'>
+                currently reading
+              </option>
+              <option selected={books.status === "finished reading"} value='finished reading'>
+                finished reading
+              </option>
+            </select>
           </p>
 
           <hr />

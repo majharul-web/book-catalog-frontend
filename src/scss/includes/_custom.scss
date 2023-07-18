@@ -10,6 +10,23 @@
   outline: 0;
   border: 1px solid var(--theme-color);
 }
+.form-select {
+  box-shadow: none;
+  outline: 0;
+  border: 1px solid var(--theme-color);
+  display: inline-block;
+  width: auto;
+}
+.form-select:hover {
+  box-shadow: none;
+  outline: 0;
+  border: 1px solid var(--theme-color);
+}
+.form-select:focus {
+  box-shadow: none;
+  outline: 0;
+  border: 1px solid var(--theme-color);
+}
 .form-label {
   margin-bottom: 0.1rem;
   font-size: 14px;

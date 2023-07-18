@@ -8,7 +8,6 @@ const ReadingLists = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { data, isLoading, error } = useGetReadingListQuery(user!._id, {
     refetchOnMountOrArgChange: true,
-    pollingInterval: 3000,
   });
   const allBooks = data?.data;
 
