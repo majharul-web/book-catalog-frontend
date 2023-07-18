@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { toast } from "react-hot-toast";
@@ -12,7 +12,6 @@ interface IProps {
 }
 const ReadBook = ({ books }: IProps) => {
   const book = books.book;
-  const [status, setStatus] = useState("");
 
   const [deleteBook, { data: deletedData, isLoading: deleteLoading, error: deleteError, isSuccess }] =
     useDeleteFromReadingListMutation();

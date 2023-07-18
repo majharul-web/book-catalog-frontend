@@ -41,12 +41,17 @@ const Appbar = () => {
               </Link>
             </Nav>
             <div className='off-form'>
-              <Link to='wishlist' className='nav-link mx-2'>
-                <FaHeart />
-              </Link>
-              <Link to='reading-list' className='nav-link mx-2'>
-                <BiSolidBookReader />
-              </Link>
+              {auth.accessToken && (
+                <>
+                  <Link to='wishlist' className='nav-link mx-2'>
+                    <FaHeart />
+                  </Link>
+                  <Link to='reading-list' className='nav-link mx-2'>
+                    <BiSolidBookReader />
+                  </Link>
+                </>
+              )}
+
               {auth.accessToken && (
                 <Link to='add-books' className='nav-link mx-2'>
                   Add Books
