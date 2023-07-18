@@ -1,38 +1,39 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useDeleteBookMutation, useSingleBookQuery } from "../redux/features/book/bookApi";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { BiSolidPencil, BiSolidBookReader } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
 import FeedbackForm from "../components/FeedbackForm";
 import { toast } from "react-hot-toast";
+import { useAppSelector } from "../redux/hooks";
+import { isBookCreatedBySame } from "../utils/helper";
+import DeleteBook from "../components/DeleteBook";
+import { useSingleBookQuery } from "../redux/features/book/bookApi";
 
 const BookDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.auth);
   const { data, isLoading, error } = useSingleBookQuery(id);
   const book = data?.data;
-
-  const [deleteBook, { data: deletedData, isLoading: deleteLoading, error: deleteError, isSuccess }] =
-    useDeleteBookMutation();
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleDelete = () => {
-    deleteBook(id);
-  };
+  const [deleteshow, setDeleteShow] = useState(false);
 
-  useEffect(() => {
-    if (!deleteLoading && !deleteError && isSuccess && deletedData.statusCode === 200) {
-      toast.success("Book deleted successful");
-      navigate("/all-books");
-    } else if (!deleteLoading && deleteError) {
-      toast.error("Something went wrong!");
+  const handleDeleteClose = () => setDeleteShow(false);
+  const handleDeleteShow = () => setDeleteShow(true);
+
+  const handleEdit = () => {
+    if (isBookCreatedBySame(user!._id, book.createdBy._id)) {
+      navigate(`/edit-book/${id}`);
+    } else {
+      toast.error("You can't edit this book");
     }
-  }, [deletedData, isSuccess, deleteLoading, deleteError, navigate]);
+  };
 
   let content;
   if (isLoading) {
@@ -91,17 +92,13 @@ const BookDetails = () => {
                     <BiSolidBookReader />
                   </span>
                 </button>
-                <Link
-                  to={`/edit-book/${id}`}
-                  onClick={handleShow}
-                  className='btn btn-primary-outline my-1 mx-1'
-                >
-                  Edit{" "}
+                <button onClick={() => handleEdit()} className='btn btn-primary-outline my-1 mx-1'>
+                  Edit
                   <span className='ms-1'>
                     <BiSolidPencil />
                   </span>
-                </Link>
-                <button onClick={() => handleDelete()} className='btn btn-primary-outline my-1 mx-1'>
+                </button>
+                <button onClick={handleDeleteShow} className='btn btn-primary-outline my-1 mx-1'>
                   Delete{" "}
                   <span className='ms-1'>
                     <MdDeleteForever />
@@ -147,6 +144,7 @@ const BookDetails = () => {
         <div className='container'>{content}</div>
       </div>
       {show && <FeedbackForm show={show} handleClose={handleClose} id={id!} />}
+      {deleteshow && <DeleteBook show={deleteshow} handleClose={handleDeleteClose} id={id!} book={book} />}
     </>
   );
 };

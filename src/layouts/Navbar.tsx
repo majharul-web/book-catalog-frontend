@@ -1,12 +1,14 @@
-import { FormControl, InputGroup } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { userLoggedOut } from "../redux/features/user/userSlice";
+import Button from "react-bootstrap/Button";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import { RxAvatar } from "react-icons/rx";
 
 const Appbar = () => {
   const auth = useAppSelector((state) => state.auth);
@@ -56,6 +58,21 @@ const Appbar = () => {
                   </button>
                 )}
               </div>
+
+              {auth.accessToken && (
+                <OverlayTrigger
+                  placement='bottom'
+                  overlay={
+                    <Tooltip id={`tooltip-bottom`}>
+                      <strong>{auth?.user?.email}</strong>.
+                    </Tooltip>
+                  }
+                >
+                  <Button variant='secondary'>
+                    <RxAvatar />
+                  </Button>
+                </OverlayTrigger>
+              )}
             </div>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

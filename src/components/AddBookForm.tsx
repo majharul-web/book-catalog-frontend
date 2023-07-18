@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAddBookMutation } from "../redux/features/book/bookApi";
+import { useAppSelector } from "../redux/hooks";
 
 interface SignUpFormValues {
   title: string;
@@ -15,6 +16,7 @@ interface SignUpFormValues {
 }
 
 const AddBookForm: React.FC = () => {
+  const { user } = useAppSelector((state) => state.auth);
   const [addBook, { data, isLoading, isSuccess, error }] = useAddBookMutation();
 
   const navigate = useNavigate();
@@ -26,7 +28,8 @@ const AddBookForm: React.FC = () => {
   } = useForm<SignUpFormValues>();
 
   const onSubmit = (data: SignUpFormValues) => {
-    addBook(data);
+    const bookData = { ...data, createdBy: user?._id };
+    addBook(bookData);
   };
 
   useEffect(() => {

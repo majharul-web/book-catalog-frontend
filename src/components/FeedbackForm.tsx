@@ -3,7 +3,6 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../redux/hooks";
 import { useAddCommentMutation } from "../redux/features/book/bookApi";
 
 interface FeedbackFormProps {
@@ -44,7 +43,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ show, handleClose, id }) =>
     <div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Book Review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>
